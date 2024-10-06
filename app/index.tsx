@@ -2,9 +2,11 @@ import { TodoListComponent } from '@/components/TodoList';
 import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 
+ // Adjust path as needed
+
 export default function TodoScreen() {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <TodoListComponent />
     </SafeAreaView>
   );
