@@ -27,26 +27,10 @@ interface Task {
 
 export function TodoListComponent() {
   const [text, setText] = useState("");
-  const [id, setId] = useState(0);
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-
-  async function getTasks() {
-    const allRows = await getTasksByLimit(0);
-
-    const tasksArray = allRows.map((row: any) => ({
-      id: row.id,
-      text: row.text,
-      completed: row.completed,
-    }));
-
-    setTasks(tasksArray);
-  }
-
-  useEffect(() => {
-    init();
-    getTasks();
-  }, []);
+  const [tasks, setTasks] = React.useState<Task[]>([
+        { id: 1, text: 'Doctor Appointment', completed: true },
+        { id: 2, text: 'Meeting at School', completed: false },
+    ]);
 
   async function addTask() {
     if (text.length === 0) {
@@ -54,22 +38,17 @@ export function TodoListComponent() {
       return;
     }
 
-    const task = { id, text, completed: false };
-
-    await insertOne(task);
-
-    const tasks = await getTasksByLimit(0);
-    setTasks(tasks);
-      setText("");
+    const newTaskId = tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1;
+    const newTask = { id: newTaskId, text, completed: false };
+    setTasks([...tasks, newTask]);
+    setText('');
   }
 
   async function deleteTask(id: number) {
-    await deleteOne(id);
     setTasks(tasks.filter((task) => task.id !== id));
   }
 
   async function toggleCompleted(id: number) {
-    await setComplete(id);
     setTasks(
       tasks.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task
